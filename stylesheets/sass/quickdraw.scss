@@ -1,0 +1,241 @@
+/**
+ * Grid Layout Generator
+ */
+
+$baseColumns: 12;
+$responsive: true;
+$gridConvention: grid_;
+$prefixConvention: prefix_;
+$suffixConvention: suffix_;
+
+
+/////////////////////////
+//Base grid variables  //
+/////////////////////////
+$baseColumnWidth: 60;
+$baseGutterWidth: 20;
+
+//////////////////////////
+//Tablet grid variables //
+//////////////////////////
+$tabletPortraitColumnWidth: 48;
+$tabletPortraitGutterWidth: 20;
+
+///////////////////////////////
+//Mobile portrait variables  //
+///////////////////////////////
+$mobilePortraitColumnWidth: if( $responsive, 95%, 300px ); //all columns need to stay the same
+
+
+///////////////////////////////
+//Mobile landscape variables //
+///////////////////////////////
+$mobileLandscapeColumnWidth: if( $responsive, 95%, 420px ); //all columns need to stay the same
+
+//Nothing beyond this point
+//requires any editing, unlees you
+//are adding additional media queries.
+//All of the work has been done for you.
+//All you need to do is set the variables at
+//the top and everything will be compiled to
+//CSS via SASS.
+
+/////////
+//Math //
+/////////
+$baseColumnContainer: ($baseColumnWidth + $baseGutterWidth) * $baseColumns;  //these two multiplied gives you your total overall cotainer
+$tabletPortraitColumnContainer: ($tabletPortraitColumnWidth + $tabletPortraitGutterWidth) * $baseColumns; //these two multiplied gives you your total overall container
+
+//////////////////////////////////////////////////
+//Mixin for making the dependencies for columns //
+//////////////////////////////////////////////////
+@mixin makeDependencies($columns) {
+	@for $columns from 1 through $columns {
+		.#{$gridConvention}#{$columns} {
+			float: left;
+			display: inline;
+			min-height: 1px;
+		}
+	}
+}
+
+//////////////////////////////////
+//Mixin for making a container  //
+//////////////////////////////////
+@mixin makeContainer($columns, $columnWidth, $gutterWidth) {
+	margin: 0 auto;
+	position: relative;
+
+	@if $responsive {
+		width: 90%;
+		max-width: ($columnWidth + $gutterWidth) * $columns + px;
+	} @else {
+		width: ($columnWidth + $gutterWidth) * $columns + px;
+	}
+
+}
+
+/////////////////////
+//Make grid mixin  //
+/////////////////////
+@mixin makeGrid($columns, $columnWidth, $gutterWidth, $overallContainer) {
+	@for $columns from 1 through $columns {
+		.#{$gridConvention}#{$columns} {
+			width: if( $responsive, (((($columnWidth + $gutterWidth) * $columns) - ($gutterWidth)) / $overallContainer) * 100%, ((($columnWidth + $gutterWidth) * $columns) - ($gutterWidth)) + px);
+			margin-left: if( $responsive, (($gutterWidth / 2) / $overallContainer) * 100%, (($gutterWidth / 2) + px) );
+			margin-right: if( $responsive, (($gutterWidth / 2) / $overallContainer) * 100%, (($gutterWidth / 2) + px) );
+		}
+	}
+}
+
+//////////////////////
+//Make prefix mixin //
+//////////////////////
+@mixin makePrefix($columns, $columnWidth, $gutterWidth, $overallContainer) {
+	@for $columns from 1 through $columns - 1 {
+		.#{$prefixConvention}#{$columns} {
+			padding-left: if($responsive, (($columns * ($columnWidth + $gutterWidth)) / $overallContainer) * 100% ,($columns * ($columnWidth + $gutterWidth)) + px);
+		}
+	}
+}
+
+///////////////////////////
+//Make prefix same mixin //
+///////////////////////////
+@mixin makePrefixSame($columns) {
+	@for $columns from 1 through $columns - 1 {
+		.#{$prefixConvention}#{$columns} {
+			padding-left: 0;
+		}
+	}
+}
+
+
+//////////////////////
+//Make suffix mixin //
+//////////////////////
+@mixin makeSuffix($columns, $columnWidth, $gutterWidth, $overallContainer) {
+	@for $columns from 1 through $columns - 1 {
+		.#{$suffixConvention}#{$columns} {
+			padding-right: if($responsive, (($columns * ($columnWidth + $gutterWidth)) / $overallContainer) * 100% ,($columns * ($columnWidth + $gutterWidth)) + px);
+		}
+	}
+}
+
+/////////////////////
+//Make suffix same //
+/////////////////////
+@mixin makeSuffixSame($columns) {
+	@for $columns from 1 through $columns - 1 {
+		.#{$suffixConvention}#{$columns} {
+			padding-right: 0;
+		}
+	}
+}
+
+///////////////////////////////////////////////////////////
+//Make grid mixin for making all columns the same width  //
+///////////////////////////////////////////////////////////
+@mixin makeGridSame($columns, $columnWidth) {
+	@for $columns from 1 through $columns {
+		.#{$gridConvention}#{$columns} {
+			width: $columnWidth;
+			margin: 0 auto;
+			float: none;
+			display: block;
+		}
+	}
+}
+
+///////////////////////////////////
+//Run the makeDependencies mixin //
+///////////////////////////////////
+@include makeDependencies($baseColumns);
+
+//////////////
+//Base grid //
+//////////////
+.container_12 {
+	@include makeContainer($baseColumns, $baseColumnWidth, $baseGutterWidth);
+	@include makeGrid($baseColumns, $baseColumnWidth, $baseGutterWidth, $baseColumnContainer);
+	@include makePrefix($baseColumns, $baseColumnWidth, $baseGutterWidth, $baseColumnContainer);
+	@include makeSuffix($baseColumns, $baseColumnWidth, $baseGutterWidth, $baseColumnContainer);
+}
+
+/////////////////////////
+//Tablet portrait grid //
+/////////////////////////
+@media only screen and (min-width: 768px) and (max-width: 959px) {
+	.container_12 {
+		@include makeContainer($baseColumns, $tabletPortraitColumnWidth, $tabletPortraitGutterWidth);
+		@include makeGrid($baseColumns, $tabletPortraitColumnWidth, $tabletPortraitGutterWidth, $tabletPortraitColumnContainer);
+		@include makePrefix($baseColumns, $tabletPortraitColumnWidth, $tabletPortraitGutterWidth, $tabletPortraitColumnContainer);
+		@include makeSuffix($baseColumns, $tabletPortraitColumnWidth, $tabletPortraitGutterWidth, $tabletPortraitColumnContainer);
+	}
+}
+
+/////////////////////////
+//Mobile portrait grid //
+/////////////////////////
+@media only screen and (max-width: 767px) {
+	.container_12 {
+		width: $mobilePortraitColumnWidth;
+		@include makeGridSame($baseColumns, $mobilePortraitColumnWidth);
+		@include makePrefixSame($baseColumns);
+		@include makeSuffixSame($baseColumns);
+	}
+}
+
+//////////////////////////
+//Mobile landscape grid //
+//////////////////////////
+@media only screen and (min-width: 480px) and (max-width: 767px) {
+	.container_12 {
+		width: $mobileLandscapeColumnWidth;
+		@include makeGridSame($baseColumns, $mobileLandscapeColumnWidth);
+		@include makePrefixSame($baseColumns);
+		@include makeSuffixSame($baseColumns);
+	}
+}
+
+.row {
+	margin-bottom: 40px;
+}
+
+///////////////////////////
+//Self clearing goodness //
+///////////////////////////
+.container_12:after {
+	content: "\0020";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+}
+
+.clearfix:before,
+.clearfix:after {
+	content: '\0020';
+    display: block;
+    overflow: hidden;
+    visibility: hidden;
+    width: 0;
+    height: 0;
+}
+
+.clearfix:after {
+	clear: both;
+}
+
+.clearfix {
+	zoom: 1;
+}
+
+.clear {
+    clear: both;
+    display: block;
+    overflow: hidden;
+    visibility: hidden;
+    width: 0;
+    height: 0;
+}
