@@ -47,10 +47,11 @@ If you open up the `grid.scss` file, you will find a few variables at the top of
 that you are able to set to your liking.  Provided is a table that outlines all of them in order
 they appear in the `grid.scss` file and what their value should be.
 
-| Variable                      | Value(s) Should Be    | Description                                                                                              |
+| Variable                      | Type                  | Description                                                                                              |
 | ----------------------------- |:---------------------:|:--------------------------------------------------------------------------------------------------------:|
 | `$baseColumns`                | integer               | Base columns for the entire project.  See [$baseColumns](#basecolumns).
 | `$responsive`                 | boolean               | `true` for responsive, `false` for fixed.  See [$responsive](#responsive).
+| `$expand`                     | string                | `true` to rid all margins and expand widths equally, `false` for margins.  See [$expand](#expand).
 | `$gridConvention`             | string                | Naming convention for grids.  See [$gridConvention](#gridconvention).
 | `$prefixConvention`           | string                | Naming convention for prefix.  See [$prefixConvention](#prefixconvention).
 | `$suffixConvention`           | string                | Naming convention for suffix.  See [$suffixConvention](#suffixconvention).
@@ -69,6 +70,9 @@ an even number that is easily divisible.  You can choose a odd number such as `1
 ### `$responsive`<a id="responsive" /><a/>
 This variable controls whether or not the grid compiled by Quickdraw is responsive (percentages) or fixed (pixels).  Simply passing a `true` for responsive and a `false` for fixed
 does the trick.
+
+### `$expand`<a id="expand" /><a/>
+This variable controls whether or not the grids compiled by Quickdraw should have margins applied to them.  Sometimes, you just want grids that have equal widths to them and no margins on the outside.  This is useful when you are building from a design that has a background of a different color and a center container of another.  For example, if the website your building has a background of black and a container in the center of white and inside that container different colored grids, this would be the time to use this option. Simply passing a `true` for getting rid of margins and expanding widths equally and a `false` for keeping the margins as they are does the trick.
 
 ### `$gridConvention`<a id="gridconvention" /><a/>
 This variable is the naming convention for your grids.  For example, if you gave this variable a value of `myGrid_` and had a `$baseColumn` variable of `12` your compiled CSS would
