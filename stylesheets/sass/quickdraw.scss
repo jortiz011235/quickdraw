@@ -155,7 +155,7 @@ $tabletPortraitColumnContainer: ($tabletPortraitColumnWidth + $tabletPortraitGut
 //////////////
 //Base grid //
 //////////////
-.container_12 {
+.container_#{$baseColumns} {
 	@include makeContainer($baseColumns, $baseColumnWidth, $baseGutterWidth);
 	@include makeGrid($baseColumns, $baseColumnWidth, $baseGutterWidth, $baseColumnContainer);
 	@include makePrefix($baseColumns, $baseColumnWidth, $baseGutterWidth, $baseColumnContainer);
@@ -166,7 +166,7 @@ $tabletPortraitColumnContainer: ($tabletPortraitColumnWidth + $tabletPortraitGut
 //Tablet portrait grid //
 /////////////////////////
 @media only screen and (min-width: 768px) and (max-width: 959px) {
-	.container_12 {
+	.container_#{$baseColumns} {
 		@include makeContainer($baseColumns, $tabletPortraitColumnWidth, $tabletPortraitGutterWidth);
 		@include makeGrid($baseColumns, $tabletPortraitColumnWidth, $tabletPortraitGutterWidth, $tabletPortraitColumnContainer);
 		@include makePrefix($baseColumns, $tabletPortraitColumnWidth, $tabletPortraitGutterWidth, $tabletPortraitColumnContainer);
@@ -178,7 +178,7 @@ $tabletPortraitColumnContainer: ($tabletPortraitColumnWidth + $tabletPortraitGut
 //Mobile portrait grid //
 /////////////////////////
 @media only screen and (max-width: 767px) {
-	.container_12 {
+	.container_#{$baseColumns} {
 		width: $mobilePortraitColumnWidth;
 		@include makeGridSame($baseColumns, $mobilePortraitColumnWidth);
 		@include makePrefixSame($baseColumns);
@@ -190,7 +190,7 @@ $tabletPortraitColumnContainer: ($tabletPortraitColumnWidth + $tabletPortraitGut
 //Mobile landscape grid //
 //////////////////////////
 @media only screen and (min-width: 480px) and (max-width: 767px) {
-	.container_12 {
+	.container_#{$baseColumns} {
 		width: $mobileLandscapeColumnWidth;
 		@include makeGridSame($baseColumns, $mobileLandscapeColumnWidth);
 		@include makePrefixSame($baseColumns);
@@ -202,10 +202,22 @@ $tabletPortraitColumnContainer: ($tabletPortraitColumnWidth + $tabletPortraitGut
 	margin-bottom: 40px;
 }
 
+//////////////////
+//Alpha & Omega //
+//////////////////
+@if $responsive == false {
+	.container_12 .alpha {
+		margin-left: 0;
+	}
+	.container_12 .omega {
+		margin-right: 0;
+	}
+}
+
 ///////////////////////////
 //Self clearing goodness //
 ///////////////////////////
-.container_12:after {
+.container_#{$baseColumns}:after {
 	content: "\0020";
 	display: block;
 	height: 0;
