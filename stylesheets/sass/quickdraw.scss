@@ -65,14 +65,12 @@ $tabletPortraitColumnContainer: ($tabletPortraitColumnWidth + $tabletPortraitGut
 @mixin makeContainer($columns, $columnWidth, $gutterWidth) {
 	margin: 0 auto;
 	position: relative;
-
 	@if $responsive {
 		width: 90%;
 		max-width: ($columnWidth + $gutterWidth) * $columns + px;
 	} @else {
 		width: ($columnWidth + $gutterWidth) * $columns + px;
 	}
-
 }
 
 /////////////////////
@@ -160,6 +158,16 @@ $tabletPortraitColumnContainer: ($tabletPortraitColumnWidth + $tabletPortraitGut
 	@include makeGrid($baseColumns, $baseColumnWidth, $baseGutterWidth, $baseColumnContainer);
 	@include makePrefix($baseColumns, $baseColumnWidth, $baseGutterWidth, $baseColumnContainer);
 	@include makeSuffix($baseColumns, $baseColumnWidth, $baseGutterWidth, $baseColumnContainer);
+	@if $responsive != true {
+		>*[class^="grid_"] {
+			& [class^="grid_"]:first-child {
+				margin-left: 0px;
+			}
+			& [class^="grid_"]:last-child {
+				margin-right: 0px;
+			}
+		}
+	}
 }
 
 /////////////////////////
@@ -171,6 +179,16 @@ $tabletPortraitColumnContainer: ($tabletPortraitColumnWidth + $tabletPortraitGut
 		@include makeGrid($baseColumns, $tabletPortraitColumnWidth, $tabletPortraitGutterWidth, $tabletPortraitColumnContainer);
 		@include makePrefix($baseColumns, $tabletPortraitColumnWidth, $tabletPortraitGutterWidth, $tabletPortraitColumnContainer);
 		@include makeSuffix($baseColumns, $tabletPortraitColumnWidth, $tabletPortraitGutterWidth, $tabletPortraitColumnContainer);
+		@if $responsive != true {
+		>*[class^="grid_"] {
+			& [class^="grid_"]:first-child {
+				margin-left: 0px;
+			}
+			& [class^="grid_"]:last-child {
+				margin-right: 0px;
+			}
+		}
+	}
 	}
 }
 
