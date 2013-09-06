@@ -2,7 +2,7 @@
  * Quickdraw - Grid Layout Generator
  */
 $baseColumns: 12;
-$responsive: true;
+$responsive: false;
 $expand: false;
 $gridConvention: grid_;
 $prefixConvention: prefix_;
@@ -55,6 +55,19 @@ $tabletPortraitColumnContainer: ($tabletPortraitColumnWidth + $tabletPortraitGut
 			float: left;
 			display: inline;
 			min-height: 1px;
+			position: relative;
+		}
+		.#{$gridConvention}#{$columns}_alpha {
+			float: left;
+			display: inline;
+			min-height: 1px;
+			position: relative;
+		}
+		.#{$gridConvention}#{$columns}_omega {
+			float: left;
+			display: inline;
+			min-height: 1px;
+			position: relative;
 		}
 	}
 }
@@ -98,6 +111,18 @@ $tabletPortraitColumnContainer: ($tabletPortraitColumnWidth + $tabletPortraitGut
 @mixin makeGridSame($columns, $columnWidth) {
 	@for $columns from 1 through $columns {
 		.#{$gridConvention}#{$columns} {
+			width: $columnWidth;
+			margin: 0 auto;
+			float: none;
+			display: block;
+		}
+		.#{$gridConvention}#{$columns}_alpha {
+			width: $columnWidth;
+			margin: 0 auto;
+			float: none;
+			display: block;
+		}
+		.#{$gridConvention}#{$columns}_omega {
 			width: $columnWidth;
 			margin: 0 auto;
 			float: none;
@@ -151,10 +176,43 @@ $tabletPortraitColumnContainer: ($tabletPortraitColumnWidth + $tabletPortraitGut
 	}
 }
 
+///////////////////////////////////////////
+//Alpha & Omega for fixed and responsive //
+///////////////////////////////////////////
+@mixin alphaOmega($columns, $columnWidth, $gutterWidth, $overallContainer) {
+	@for $columns from 1 through $columns {
+		.#{$gridConvention}#{$columns}_alpha {
+			@if $responsive == true {
+				width: ((((($columnWidth + $gutterWidth) * $columns) - ($gutterWidth)) / $overallContainer) * 100%) + ((($gutterWidth / 2) / $overallContainer) * 100%);
+				margin-left: 0;
+				margin-right: (($gutterWidth / 2) / $overallContainer) * 100%;
+			} @else {
+				width: ((($columnWidth + $gutterWidth) * $columns) - ($gutterWidth) + ($gutterWidth / 2) + px);
+				margin-right: (($gutterWidth / 2) + px);
+				margin-left: 0;
+			}
+		}
+		.#{$gridConvention}#{$columns}_omega {
+			@if $responsive == true {
+				width: ((((($columnWidth + $gutterWidth) * $columns) - ($gutterWidth)) / $overallContainer) * 100%) + ((($gutterWidth / 2) / $overallContainer) * 100%);
+				margin-left: (($gutterWidth / 2) / $overallContainer) * 100%;
+				margin-right: 0;
+			} @else {
+				width: ((($columnWidth + $gutterWidth) * $columns) - ($gutterWidth) + ($gutterWidth / 2) + px);
+				margin-left: (($gutterWidth / 2) + px);
+				margin-right: 0;
+			}
+		}
+	}
+}
+
+
+
 ///////////////////////////////////
 //Run the makeDependencies mixin //
 ///////////////////////////////////
 @include makeDependencies($baseColumns);
+
 
 //////////////
 //Base grid //
@@ -164,6 +222,7 @@ $tabletPortraitColumnContainer: ($tabletPortraitColumnWidth + $tabletPortraitGut
 	@include makeGrid($baseColumns, $baseColumnWidth, $baseGutterWidth, $baseColumnContainer);
 	@include makePrefix($baseColumns, $baseColumnWidth, $baseGutterWidth, $baseColumnContainer);
 	@include makeSuffix($baseColumns, $baseColumnWidth, $baseGutterWidth, $baseColumnContainer);
+	@include alphaOmega($baseColumns, $baseColumnWidth, $baseGutterWidth, $baseColumnContainer);
 	@if $responsive != true {
 		>*[class^="grid_"] {
 			& [class^="grid_"]:first-child {
@@ -185,6 +244,7 @@ $tabletPortraitColumnContainer: ($tabletPortraitColumnWidth + $tabletPortraitGut
 		@include makeGrid($baseColumns, $tabletPortraitColumnWidth, $tabletPortraitGutterWidth, $tabletPortraitColumnContainer);
 		@include makePrefix($baseColumns, $tabletPortraitColumnWidth, $tabletPortraitGutterWidth, $tabletPortraitColumnContainer);
 		@include makeSuffix($baseColumns, $tabletPortraitColumnWidth, $tabletPortraitGutterWidth, $tabletPortraitColumnContainer);
+		@include alphaOmega($baseColumns, $tabletPortraitColumnWidth, $tabletPortraitGutterWidth, $tabletPortraitColumnContainer);
 		@if $responsive != true {
 		>*[class^="grid_"] {
 			& [class^="grid_"]:first-child {
@@ -224,18 +284,6 @@ $tabletPortraitColumnContainer: ($tabletPortraitColumnWidth + $tabletPortraitGut
 
 .row {
 	margin-bottom: 40px;
-}
-
-//////////////////
-//Alpha & Omega //
-//////////////////
-@if $responsive == false {
-	.container_12 .alpha {
-		margin-left: 0;
-	}
-	.container_12 .omega {
-		margin-right: 0;
-	}
 }
 
 ///////////////////////////
